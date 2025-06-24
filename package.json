@@ -1,0 +1,29 @@
+{
+  "name": "nubred-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "nubred backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://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@github.com/Bertomaycry/Nubred-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bertomaycry/Nubred-backend/issues"
+  },
+  "homepage": "https://github.com/Bertomaycry/Nubred-backend#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.16.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.0"
+  }
+}
