@@ -1,1 +1,1 @@
-export const DB_NAME = "nubred";
+export const DB_NAME = "nubred-dev";

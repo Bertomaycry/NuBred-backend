@@ -43,16 +43,16 @@ userSchema.methods.comparePassword = async function (password) {
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     { id: this._id, email: this.email },
-    process.env.JWT_ACCESS_TOKEN_SECRET,
+    process.env.ACCESS_TOKEN_SECRET_KEY,
     {
-      expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRY,
+      expiresIn: "2h",
     }
   );
 };
 
 userSchema.methods.generateRefreshToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_REFRESH_TOKEN_SECRET, {
-    expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRY,
+  return jwt.sign({ id: this._id }, process.env.REFRESH_TOKEN_SECRET_KEY, {
+    expiresIn: "1d",
   });
 };
 

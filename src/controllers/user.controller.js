@@ -43,6 +43,22 @@ export const register = asyncHandler(async (req, res) => {
   }
 });
 
+const generateTokens = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+
+    return { accessToken, refreshToken };
+  } catch (error) {
+    throw new Error("Something went wrong while generating token: " + error.message);
+  }
+};
+
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -65,13 +81,17 @@ export const login = asyncHandler(async (req, res) => {
       });
     }
 
+    const { accessToken, refreshToken } = await generateTokens(user._id);
+
     res.status(200).json({
       success: true,
       message: "User logged in successfully",
       user: {
         id: user._id,
-        name: user.name,
+        name: `${user.firstName} ${user.lastName}`,
         email: user.email,
+        accessToken: accessToken || null,
+        refreshToken: refreshToken || null,
       },
     });
   } catch (error) {
