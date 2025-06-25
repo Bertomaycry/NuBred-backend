@@ -15,6 +15,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // routes
-app.use("/api/users", userRoutes);
+app.use("/api/auth", userRoutes);
 
 export default app;

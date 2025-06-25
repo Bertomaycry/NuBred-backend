@@ -1,6 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
+import admin from "../utils/firebase.js";
 
 export const register = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, phoneNumber, password } = req.body;
@@ -105,9 +106,8 @@ export const login = asyncHandler(async (req, res) => {
 });
 
 export const logout = asyncHandler(async (req, res) => {
+  console.log(req.user._id, "user id");
 
-  console.log(req.user._id,'user id');
-  
   try {
     await User.findByIdAndUpdate(req.user._id, {
       refreshToken: undefined,
@@ -120,6 +120,68 @@ export const logout = asyncHandler(async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message ?? "Something went wrong",
+    });
+  }
+});
+
+export const handleSocialLogin = asyncHandler(async (req, res) => {
+  const { idToken } = req.body;
+
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const { email, name } = decodedToken;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email not found in token",
+      });
+    }
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      let firstName = "";
+      let lastName = "";
+      if (name) {
+        const nameParts = name.split(" ");
+        firstName = nameParts[0];
+        lastName = nameParts.slice(1).join(" ") || "";
+      }
+
+      const randomPassword = Math.random().toString(36).slice(-8);
+
+      user = await User.create({
+        firstName,
+        lastName,
+        email,
+        password: randomPassword,
+        phoneNumber: `+${Math.floor(Math.random() * 9000000000) + 1000000000}`,
+      });
+    }
+
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Social login successful",
+      user: {
+        id: user._id,
+        name: `${user.firstName} ${user.lastName}`,
+        email: user.email,
+        accessToken,
+        refreshToken,
+      },
+    });
+  } catch (error) {
+    console.error("Social login failed:", error);
+    res.status(401).json({
+      success: false,
+      message: "Invalid or expired token",
     });
   }
 });
