@@ -1,5 +1,5 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
-import User from "../models/user.Model.js";
+import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 
 export const register = asyncHandler(async (req, res) => {
@@ -55,7 +55,9 @@ const generateTokens = async (userId) => {
 
     return { accessToken, refreshToken };
   } catch (error) {
-    throw new Error("Something went wrong while generating token: " + error.message);
+    throw new Error(
+      "Something went wrong while generating token: " + error.message
+    );
   }
 };
 
@@ -93,6 +95,26 @@ export const login = asyncHandler(async (req, res) => {
         accessToken: accessToken || null,
         refreshToken: refreshToken || null,
       },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message ?? "Something went wrong",
+    });
+  }
+});
+
+export const logout = asyncHandler(async (req, res) => {
+
+  console.log(req.user._id,'user id');
+  
+  try {
+    await User.findByIdAndUpdate(req.user._id, {
+      refreshToken: undefined,
+    });
+
+    res.status(200).json({
+      success: true,
     });
   } catch (error) {
     res.status(500).json({
