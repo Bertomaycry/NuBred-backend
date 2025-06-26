@@ -2,32 +2,46 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const userSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+    },
+    email: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    phoneNumber: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    refreshToken: {
+      type: String,
+    },
+
+    account_created: { type: Boolean, default: false },
+    profile_type: {
+      type: String,
+      enum: ["company", "consultant"],
+      default: null,
+    },
+    profile: {
+      type: mongoose.Schema.Types.ObjectId,
+      refPath: "profile_type",
+    },
   },
-  lastName: {
-    type: String,
-  },
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-  },
-  phoneNumber: {
-    type: String,
-    unique: true,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  refreshToken: {
-    type: String,
-  },
-});
+  { timestamps: true }
+);
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
