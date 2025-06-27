@@ -95,6 +95,9 @@ export const login = asyncHandler(async (req, res) => {
         email: user.email,
         accessToken: accessToken || null,
         refreshToken: refreshToken || null,
+        profile: user.profile,
+        profile_type: user.profile_type,
+        account_created: user.account_created,
       },
     });
   } catch (error) {
@@ -175,6 +178,9 @@ export const handleSocialLogin = asyncHandler(async (req, res) => {
         email: user.email,
         accessToken,
         refreshToken,
+        profile: user.profile,
+        profile_type: user.profile_type,
+        account_created: user.account_created,
       },
     });
   } catch (error) {

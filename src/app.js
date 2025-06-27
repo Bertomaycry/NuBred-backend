@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import userRoutes from "./routes/user.routes.js";
+import profileRoutes from "./routes/profile.routes.js";
 
 const app = express();
 
@@ -16,5 +17,6 @@ app.use(express.static("public"));
 
 // routes
 app.use("/api/auth", userRoutes);
+app.use("/api/profile", profileRoutes);
 
 export default app;

@@ -21,7 +21,12 @@ const personalInfoSchema = new mongoose.Schema(
 
 const consultantProfileSchema = new mongoose.Schema(
   {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      unique: true,
+    },
 
     consultant_name: { type: String, required: true },
     consultant_email: { type: String, required: true },

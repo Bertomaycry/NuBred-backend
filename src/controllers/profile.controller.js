@@ -1,5 +1,5 @@
-import Company from "../models/CompanyProfile.js";
-import Consultant from "../models/ConsultantProfile.js";
+import Company from "../models/CompanyProfile.model.js";
+import Consultant from "../models/ConsultantProfile.model.js";
 import User from "../models/user.model.js";
 
 export const createUserProfile = async (req, res) => {
@@ -9,6 +9,16 @@ export const createUserProfile = async (req, res) => {
 
     if (!["company", "consultant"].includes(profile_type)) {
       return res.status(400).json({ message: "Invalid profile type." });
+    }
+
+    const existingUser = await User.findById(userId);
+    if (existingUser?.profile) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "Profile already exists for this user.",
+        });
     }
 
     let createdProfile;
@@ -25,15 +35,16 @@ export const createUserProfile = async (req, res) => {
       });
     }
 
-    await User.findByIdAndUpdate(userId, {
-      account_created: true,
-      profile_type,
-      profile: createdProfile._id,
-    });
+    existingUser.account_created = true;
+    existingUser.profile_type = profile_type;
+    existingUser.profile = createdProfile._id;
+    await existingUser.save();
 
     res.status(201).json({
+      success: true,
       message: `${profile_type} profile created successfully.`,
       profile_id: createdProfile._id,
+      data: createdProfile,
     });
   } catch (err) {
     console.error("Error creating profile:", err);

@@ -22,7 +22,12 @@ const legalRepresentativeSchema = new mongoose.Schema(
 
 const companyProfileSchema = new mongoose.Schema(
   {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      unique: true,
+    },
 
     legal_company_name: { type: String, required: true },
     country_of_incorporation: { type: String, required: true },
@@ -43,4 +48,4 @@ const companyProfileSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Company", companyProfileSchema);
+export default mongoose.model("Company", companyProfileSchema);
