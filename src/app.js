@@ -18,5 +18,6 @@ app.use(express.static("public"));
 // routes
 app.use("/api/auth", userRoutes);
 app.use("/api/profile", profileRoutes);
+app.get('/health', (_, res) => res.send('server is running'));
 
 export default app;
