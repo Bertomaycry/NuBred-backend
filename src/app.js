@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import userRoutes from "./routes/user.routes.js";
 import profileRoutes from "./routes/profile.routes.js";
+import inquiryRoutes from "./routes/inquiry.routes.js";
 
 const app = express();
 
@@ -18,6 +19,10 @@ app.use(express.static("public"));
 // routes
 app.use("/api/auth", userRoutes);
 app.use("/api/profile", profileRoutes);
+<<<<<<< HEAD
 app.get('/health', (_, res) => res.send('server is running'));
+=======
+app.use("/api/inquiry", inquiryRoutes);
+>>>>>>> 7aebbcb9bfcad88cb0865e2d5593b730b9983958
 
 export default app;
