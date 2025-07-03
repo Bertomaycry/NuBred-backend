@@ -92,7 +92,10 @@ export const login = asyncHandler(async (req, res) => {
       user: {
         id: user._id,
         name: `${user.firstName} ${user.lastName}`,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
+        phoneNumber: user.phoneNumber,
         accessToken: accessToken || null,
         refreshToken: refreshToken || null,
         profile: user.profile,
