@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema(
     },
 
     account_created: { type: Boolean, default: false },
+    is_onboarded: { type: Boolean, default: false },
     profile_type: {
       type: String,
       enum: ["company", "consultant"],
