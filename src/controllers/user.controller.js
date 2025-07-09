@@ -188,6 +188,7 @@ export const handleSocialLogin = asyncHandler(async (req, res) => {
         profile: user.profile,
         profile_type: user.profile_type,
         account_created: user.account_created,
+        is_onboarded: user.is_onboarded,
       },
     });
   } catch (error) {
