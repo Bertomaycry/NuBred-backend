@@ -65,6 +65,12 @@ const generateTokens = async (userId) => {
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
+  if (!email && !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Please provide email and password",
+    });
+  }
   try {
     const user = await User.findOne({ email });
 
@@ -102,6 +108,7 @@ export const login = asyncHandler(async (req, res) => {
         profile_type: user.profile_type,
         account_created: user.account_created,
         is_onboarded: user.is_onboarded,
+        is_account_created_skipped: user.is_account_created_skipped,
       },
     });
   } catch (error) {
@@ -189,6 +196,7 @@ export const handleSocialLogin = asyncHandler(async (req, res) => {
         profile_type: user.profile_type,
         account_created: user.account_created,
         is_onboarded: user.is_onboarded,
+        is_account_created_skipped: user.is_account_created_skipped,
       },
     });
   } catch (error) {
@@ -207,6 +215,22 @@ export const completeOnboarding = asyncHandler(async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Onboarding complete",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message ?? "Something went wrong",
+    });
+  }
+});
+
+export const accountCreationChecked = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  try {
+    await User.findByIdAndUpdate(userId, { is_account_created_skipped: true });
+    res.status(200).json({
+      success: true,
+      message: "User logged in successfully",
     });
   } catch (error) {
     res.status(500).json({
