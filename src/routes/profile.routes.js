@@ -7,7 +7,7 @@ import {
 
 const router = express.Router();
 
-router.post("/create", jwtVerify, createUserProfile);
+router.post("/create", createUserProfile);
 router.get("/profile", jwtVerify, getUserProfile);
 
 export default router;

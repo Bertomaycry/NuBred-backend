@@ -4,7 +4,8 @@ import User from "../models/user.model.js";
 
 export const createUserProfile = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.body._id;
+
     const { profile_type, profile_data } = req.body;
 
     if (!["company", "consultant"].includes(profile_type)) {
@@ -13,25 +14,23 @@ export const createUserProfile = async (req, res) => {
 
     const existingUser = await User.findById(userId);
     if (existingUser?.profile) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Profile already exists for this user.",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Profile already exists for this user.",
+      });
     }
 
     let createdProfile;
 
     if (profile_type === "company") {
       createdProfile = await Company.create({
-        ...profile_data,
         user: userId,
+        ...profile_data,
       });
     } else {
       createdProfile = await Consultant.create({
-        ...profile_data,
         user: userId,
+        ...profile_data,
       });
     }
 

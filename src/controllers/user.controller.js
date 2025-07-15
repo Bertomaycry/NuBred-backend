@@ -54,6 +54,22 @@ export const register = asyncHandler(async (req, res) => {
   }
 });
 
+export const getUsers = asyncHandler(async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.status(200).json({
+      success: true,
+      message: "Users fetched Successfully",
+      data: users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message ?? "Something went wrong",
+    });
+  }
+});
+
 const generateTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
@@ -119,6 +135,7 @@ export const login = asyncHandler(async (req, res) => {
         account_created: user.account_created,
         is_onboarded: user.is_onboarded,
         is_account_created_skipped: user.is_account_created_skipped,
+        ban: user.ban,
       },
     });
   } catch (error) {
@@ -130,8 +147,6 @@ export const login = asyncHandler(async (req, res) => {
 });
 
 export const logout = asyncHandler(async (req, res) => {
-  console.log(req.user._id, "user id");
-
   try {
     await User.findByIdAndUpdate(req.user._id, {
       refreshToken: undefined,
@@ -207,6 +222,7 @@ export const handleSocialLogin = asyncHandler(async (req, res) => {
         account_created: user.account_created,
         is_onboarded: user.is_onboarded,
         is_account_created_skipped: user.is_account_created_skipped,
+        ban: user.ban,
       },
     });
   } catch (error) {
@@ -249,3 +265,52 @@ export const accountCreationChecked = asyncHandler(async (req, res) => {
     });
   }
 });
+
+export const banUser = async (req, res) => {
+  const { userId, ban } = req.body;
+
+  if (!userId || !ban || !ban.type || !ban.reason) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const banData = {
+    is_banned: true,
+    type: ban.type,
+    reason: ban.reason,
+    period: ban.type === "temporary" ? ban.period : null,
+  };
+
+  user.ban = banData;
+
+  await user.save();
+
+  res.status(200).json({ message: `User has been banned (${ban.type})` });
+};
+
+export const removeBan = async (req, res) => {
+  const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ message: "No user selected" });
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const banData = {
+    is_banned: false,
+  };
+
+  user.ban = banData;
+
+  await user.save();
+
+  res.status(200).json({ message: `Ban has been removed` });
+};

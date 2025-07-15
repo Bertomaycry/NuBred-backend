@@ -28,6 +28,27 @@ const userSchema = new mongoose.Schema(
     refreshToken: {
       type: String,
     },
+    ban: {
+      is_banned: { type: Boolean, default: false },
+      period: {
+        type: String,
+        required: function () {
+          return this.ban.is_banned;
+        },
+      },
+      type: {
+        type: String,
+        required: function () {
+          return this.ban.is_banned;
+        },
+      },
+      reason: {
+        type: String,
+        required: function () {
+          return this.ban.is_banned;
+        },
+      },
+    },
 
     account_created: { type: Boolean, default: false },
     is_account_created_skipped: { type: Boolean, default: false },
@@ -73,4 +94,4 @@ userSchema.methods.generateRefreshToken = function () {
 
 const User = mongoose.model("User", userSchema);
 
-export default User;  
+export default User;
