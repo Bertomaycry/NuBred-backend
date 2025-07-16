@@ -282,14 +282,17 @@ export const banUser = async (req, res) => {
     is_banned: true,
     type: ban.type,
     reason: ban.reason,
-    period: ban.type === "temporary" ? ban.period : null,
+    period: ban.type === "Temporary" ? ban.period : null,
   };
 
   user.ban = banData;
 
   await user.save();
 
-  res.status(200).json({ message: `User has been banned (${ban.type})` });
+  res.status(200).json({
+    success: true,
+    message: `User has been banned (${ban.type}ly)`,
+  });
 };
 
 export const removeBan = async (req, res) => {
@@ -312,5 +315,36 @@ export const removeBan = async (req, res) => {
 
   await user.save();
 
-  res.status(200).json({ message: `Ban has been removed` });
+  res.status(200).json({
+    success: true,
+    message: `Ban has been removed successfully`,
+  });
+};
+export const updateBan = async (req, res) => {
+  const { userId, ban } = req.body;
+
+  if (!userId || !ban || !ban.type || !ban.reason) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const banData = {
+    is_banned: true,
+    type: ban.type,
+    reason: ban.reason,
+    period: ban.type === "Temporary" ? ban.period : null,
+  };
+
+  user.ban = banData;
+
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: `User has been banned updated`,
+  });
 };

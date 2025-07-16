@@ -9,6 +9,7 @@ import {
   banUser,
   removeBan,
   getUsers,
+  updateBan,
 } from "../controllers/user.controller.js";
 import { jwtVerify } from "../middlewares/auth.middleware.js";
 
@@ -23,5 +24,6 @@ router.post("/complete-onboarding", completeOnboarding);
 router.post("/account-creation-skipped", accountCreationChecked);
 router.post("/ban-user", banUser);
 router.post("/unban", removeBan);
+router.post("/update-ban", updateBan);
 
 export default router;

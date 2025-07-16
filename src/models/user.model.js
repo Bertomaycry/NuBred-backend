@@ -30,22 +30,22 @@ const userSchema = new mongoose.Schema(
     },
     ban: {
       is_banned: { type: Boolean, default: false },
-      period: {
-        type: String,
-        required: function () {
-          return this.ban.is_banned;
-        },
-      },
       type: {
         type: String,
         required: function () {
-          return this.ban.is_banned;
+          return this.is_banned === true;
         },
       },
       reason: {
         type: String,
         required: function () {
-          return this.ban.is_banned;
+          return this.is_banned === true;
+        },
+      },
+      period: {
+        type: Number,
+        required: function () {
+          return this.type === "temporary" && this.is_banned === true;
         },
       },
     },
