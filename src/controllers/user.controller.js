@@ -213,7 +213,6 @@ export const handleSocialLogin = asyncHandler(async (req, res) => {
         name: `${user.firstName} ${user.lastName}`,
         firstName: user.firstName || "",
         lastName: user.lastName || "",
-        phoneNumber: user.phoneNumber || "",
         email: user.email,
         accessToken,
         refreshToken,
