@@ -48,4 +48,4 @@ const companyProfileSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Company", companyProfileSchema);
+export default mongoose.model("company", companyProfileSchema);

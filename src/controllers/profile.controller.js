@@ -53,8 +53,7 @@ export const createUserProfile = async (req, res) => {
 
 export const getUserProfile = async (req, res) => {
   try {
-    const userId = req.user.id;
-
+    const userId = req.params._id;
     const user = await User.findById(userId)
       .select("-password -refreshToken")
       .populate("profile");

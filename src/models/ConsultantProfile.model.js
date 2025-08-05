@@ -45,4 +45,4 @@ const consultantProfileSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Consultant", consultantProfileSchema);
+export default mongoose.model("consultant", consultantProfileSchema);

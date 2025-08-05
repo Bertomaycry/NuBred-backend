@@ -8,6 +8,6 @@ import {
 const router = express.Router();
 
 router.post("/create", createUserProfile);
-router.get("/profile", jwtVerify, getUserProfile);
+router.post("/user-profile/:_id", getUserProfile);
 
 export default router;
