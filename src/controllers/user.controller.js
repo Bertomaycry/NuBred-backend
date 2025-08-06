@@ -290,7 +290,7 @@ export const banUser = async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: `User has been banned (${ban.type}ly)`,
+    message: `User has been suspended successfully`,
   });
 };
 
@@ -316,7 +316,7 @@ export const removeBan = async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: `Ban has been removed successfully`,
+    message: `User has been unsuspended successfully.`,
   });
 };
 export const updateBan = async (req, res) => {
