@@ -281,7 +281,7 @@ export const banUser = async (req, res) => {
     is_banned: true,
     type: ban.type,
     reason: ban.reason,
-    period: ban.type === "Temporary" ? ban.period : null,
+    period: ban.type,
   };
 
   user.ban = banData;
@@ -335,7 +335,7 @@ export const updateBan = async (req, res) => {
     is_banned: true,
     type: ban.type,
     reason: ban.reason,
-    period: ban.type === "Temporary" ? ban.period : null,
+    period: ban.type,
   };
 
   user.ban = banData;
