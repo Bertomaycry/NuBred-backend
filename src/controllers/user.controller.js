@@ -281,7 +281,7 @@ export const banUser = async (req, res) => {
     is_banned: true,
     type: ban.type,
     reason: ban.reason,
-    period: ban.type,
+    period: ban.period,
   };
 
   user.ban = banData;
