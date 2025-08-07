@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema(
       period: {
         type: Number,
         required: function () {
-          return this.type === "temporary" && this.is_banned === true;
+          return this.is_banned === true;
         },
       },
     },
