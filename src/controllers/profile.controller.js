@@ -80,3 +80,49 @@ export const getUserProfile = async (req, res) => {
     res.status(500).json({ message: "Server error while fetching profile." });
   }
 };
+
+
+export const updateUserProfile = async (req, res) => {
+  try {
+    const { profile_id, profile_type, profile_data } = req.body;
+
+
+    console.log(profile_id,'profile id--')
+
+    if (!["company", "consultant"].includes(profile_type)) {
+      return res.status(400).json({ message: "Invalid profile type." });
+    }
+
+    let updatedProfile;
+
+    if (profile_type === "company") {
+      updatedProfile = await Company.findByIdAndUpdate(
+        profile_id,
+        { $set: profile_data },
+        { new: true, runValidators: true }
+      );
+    } else {
+      updatedProfile = await Consultant.findByIdAndUpdate(
+        profile_id,
+        { $set: profile_data },
+        { new: true, runValidators: true }
+      );
+    }
+
+    if (!updatedProfile) {
+      return res.status(404).json({
+        success: false,
+        message: `${profile_type} profile not found.`,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `${profile_type} profile updated successfully.`,
+      data: updatedProfile,
+    });
+  } catch (err) {
+    console.error("Error updating profile:", err);
+    res.status(500).json({ message: "Server error while updating profile." });
+  }
+};

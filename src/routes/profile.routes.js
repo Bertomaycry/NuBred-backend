@@ -3,11 +3,13 @@ import { jwtVerify } from "../middlewares/auth.middleware.js";
 import {
   createUserProfile,
   getUserProfile,
+  updateUserProfile,
 } from "../controllers/profile.controller.js";
 
 const router = express.Router();
 
 router.post("/create", createUserProfile);
-router.post("/user-profile/:_id", getUserProfile);
+router.put("/update-profile", updateUserProfile);
+router.get("/user-profile/:_id", getUserProfile);
 
 export default router;

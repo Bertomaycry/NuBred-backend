@@ -1,7 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
-import admin from "../utils/firebase.js";
+// import admin from "../utils/firebase.js";
 
 export const register = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, phoneNumber, password } = req.body;
@@ -35,7 +35,7 @@ export const register = asyncHandler(async (req, res) => {
       success: true,
       message: "User registered successfully",
       data: {
-        id: user._id,
+        _id: user._id,
         name: `${user.firstName} ${user.lastName}`,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -62,6 +62,30 @@ export const getUsers = asyncHandler(async (req, res) => {
       message: "Users fetched Successfully",
       data: users,
     });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message ?? "Something went wrong",
+    });
+  }
+});
+export const getSingleUser = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params._id
+    const user = await User.findById(userId);
+    if (user) {
+
+      res.status(200).json({
+        success: true,
+        message: "Users fetched Successfully",
+        data: user,
+      });
+    } else {
+      res.status(200).json({
+        success: false,
+        message: "User Not Found",
+      });
+    }
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -122,7 +146,7 @@ export const login = asyncHandler(async (req, res) => {
       success: true,
       message: "User logged in successfully",
       user: {
-        id: user._id,
+        _id: user._id,
         name: `${user.firstName} ${user.lastName}`,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -167,7 +191,7 @@ export const handleSocialLogin = asyncHandler(async (req, res) => {
   const { idToken } = req.body;
 
   try {
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    // const decodedToken = await admin.auth().verifyIdToken(idToken);
     const { email, name } = decodedToken;
 
     if (!email) {
@@ -209,7 +233,7 @@ export const handleSocialLogin = asyncHandler(async (req, res) => {
       success: true,
       message: "Social login successful",
       user: {
-        id: user._id,
+        _id: user._id,
         name: `${user.firstName} ${user.lastName}`,
         firstName: user.firstName || "",
         lastName: user.lastName || "",
@@ -347,3 +371,32 @@ export const updateBan = async (req, res) => {
     message: `User has been banned updated`,
   });
 };
+
+
+export const deleteUser = asyncHandler(async (req, res) => {
+
+
+  try {
+    const userId = req.params._id;
+    console.log(userId, '-------')
+    const user = await User.findByIdAndDelete(userId)
+    if (user) {
+      res.status(200).json({
+        success: true,
+        message: "Account Deleted Successfully",
+        data: user,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+        data: user,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message ?? "Something went wrong",
+    });
+  }
+});
