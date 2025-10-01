@@ -156,6 +156,7 @@ export const login = asyncHandler(async (req, res) => {
         refreshToken: refreshToken || null,
         profile: user.profile,
         profile_type: user.profile_type,
+        is_unregistered: user.is_unregistered,
         account_created: user.account_created,
         is_onboarded: user.is_onboarded,
         is_account_created_skipped: user.is_account_created_skipped,
@@ -243,6 +244,7 @@ export const handleSocialLogin = asyncHandler(async (req, res) => {
         profile: user.profile,
         profile_type: user.profile_type,
         account_created: user.account_created,
+        is_unregistered: user.is_unregistered,
         is_onboarded: user.is_onboarded,
         is_account_created_skipped: user.is_account_created_skipped,
         ban: user.ban,
@@ -400,3 +402,60 @@ export const deleteUser = asyncHandler(async (req, res) => {
     });
   }
 });
+
+
+export const registerAccount = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params._id;
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { is_unregistered: false },
+      { new: true }
+    );
+    if (user) {
+      res.status(200).json({
+        success: true,
+        message: "Account Registered successfully",
+        data: user,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message ?? "Something went wrong",
+    });
+  }
+});
+export const unregisterUser = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params._id;
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { is_unregistered: true },
+      { new: true }
+    );
+    if (user) {
+      res.status(200).json({
+        success: true,
+        message: "Account unregistered successfully",
+        data: user,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message ?? "Something went wrong",
+    });
+  }
+});
+

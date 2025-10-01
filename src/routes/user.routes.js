@@ -12,6 +12,8 @@ import {
   updateBan,
   deleteUser,
   getSingleUser,
+  unregisterUser,
+  registerAccount,
 } from "../controllers/user.controller.js";
 import { jwtVerify } from "../middlewares/auth.middleware.js";
 
@@ -29,5 +31,7 @@ router.post("/ban-user", banUser);
 router.post("/unban", removeBan);
 router.post("/update-ban", updateBan);
 router.delete("/delete-user/:_id", deleteUser);
+router.post("/unregister/:_id", unregisterUser);
+router.post("/register-account/:_id", registerAccount);
 
 export default router;

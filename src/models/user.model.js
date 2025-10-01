@@ -51,6 +51,7 @@ const userSchema = new mongoose.Schema(
     },
 
     account_created: { type: Boolean, default: false },
+    is_unregistered: { type: Boolean, default: false },
     is_account_created_skipped: { type: Boolean, default: false },
     is_onboarded: { type: Boolean, default: false },
     profile_type: {
