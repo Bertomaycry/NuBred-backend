@@ -406,7 +406,7 @@ export const deleteUser = asyncHandler(async (req, res) => {
 
 export const registerAccount = asyncHandler(async (req, res) => {
   try {
-    const userId = req.params._id;
+    const { userId } = req.body;
     const user = await User.findByIdAndUpdate(
       userId,
       { is_unregistered: false },

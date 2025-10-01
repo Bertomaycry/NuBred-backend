@@ -32,6 +32,6 @@ router.post("/unban", removeBan);
 router.post("/update-ban", updateBan);
 router.delete("/delete-user/:_id", deleteUser);
 router.post("/unregister/:_id", unregisterUser);
-router.post("/register-account/:_id", registerAccount);
+router.post("/register-account", registerAccount);
 
 export default router;
