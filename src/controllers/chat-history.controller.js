@@ -1,7 +1,4 @@
-import Chat from "../models/chat-history.model";
-
-
-
+import Chat from "../models/chat-history.model.js";
 
 export const saveChatHistory = async (req, res) => {
     const { message } = req.body;
