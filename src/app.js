@@ -6,12 +6,11 @@ import inquiryRoutes from "./routes/inquiry.routes.js";
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: '*', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -20,5 +19,11 @@ app.use(express.static("public"));
 app.use("/api/auth", userRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/inquiry", inquiryRoutes);
+
+
+
+app.get('/health', (req, res) => {
+  res.send('server is working')
+})
 
 export default app;
