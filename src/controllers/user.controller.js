@@ -170,6 +170,42 @@ export const login = asyncHandler(async (req, res) => {
     });
   }
 });
+export const adminLogin = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email && !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Please provide email and password",
+    });
+  }
+  try {
+
+
+    if (email !== 'admin@nubred.com' && password !== 'Nubred@12') {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    const { accessToken, refreshToken } = await generateTokens(email);
+
+    res.status(200).json({
+      success: true,
+      message: "User logged in successfully",
+      user: {
+        accessToken: accessToken || null,
+        refreshToken: refreshToken || null,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message ?? "Something went wrong",
+    });
+  }
+});
 
 export const logout = asyncHandler(async (req, res) => {
   try {
