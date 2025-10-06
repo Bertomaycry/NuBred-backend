@@ -28,6 +28,9 @@ const userSchema = new mongoose.Schema(
     refreshToken: {
       type: String,
     },
+    accessToken: {
+      type: String,
+    },
     ban: {
       is_banned: { type: Boolean, default: false },
       type: {
@@ -82,7 +85,7 @@ userSchema.methods.generateAccessToken = function () {
     { id: this._id, email: this.email },
     process.env.ACCESS_TOKEN_SECRET_KEY,
     {
-      expiresIn: "2h",
+      expiresIn: "2m",
     }
   );
 };

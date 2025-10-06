@@ -9,7 +9,7 @@ import {
 const router = express.Router();
 
 router.post("/create", createUserProfile);
-router.put("/update-profile", updateUserProfile);
-router.get("/user-profile/:_id", getUserProfile);
+router.put("/update-profile", jwtVerify, updateUserProfile);
+router.get("/user-profile/:_id", jwtVerify, getUserProfile);
 
 export default router;
