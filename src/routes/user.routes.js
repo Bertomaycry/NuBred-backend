@@ -22,18 +22,18 @@ const router = Router();
 
 router.post("/register", register);
 router.post("/admin-login", adminLogin);
-router.get("/users", getUsers);
-router.get("/user/:_id", getSingleUser);
+router.get("/users", jwtVerify, getUsers);
+router.get("/user/:_id", jwtVerify, getSingleUser);
 router.post("/login", login);
 router.post("/logout", jwtVerify, logout);
 router.post("/social-login", handleSocialLogin);
 router.post("/complete-onboarding", completeOnboarding);
 router.post("/account-creation-skipped", accountCreationChecked);
-router.post("/ban-user", banUser);
-router.post("/unban", removeBan);
-router.post("/update-ban", updateBan);
+router.post("/ban-user", jwtVerify, banUser);
+router.post("/unban", jwtVerify, removeBan);
+router.post("/update-ban", jwtVerify, updateBan);
 router.delete("/delete-user/:_id", jwtVerify, deleteUser);
 router.post("/unregister/:_id", jwtVerify, unregisterUser);
-router.post("/register-account", registerAccount);
+router.post("/register-account", jwtVerify, registerAccount);
 
 export default router;

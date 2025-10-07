@@ -87,7 +87,7 @@ userSchema.methods.generateAccessToken = function () {
     { id: this._id, email: this.email },
     process.env.ACCESS_TOKEN_SECRET_KEY,
     {
-      expiresIn: "2m",
+      expiresIn: "20m",
     }
   );
 };
