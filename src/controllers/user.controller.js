@@ -125,7 +125,7 @@ export const login = asyncHandler(async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).json({
+      return res.status(400).json({
         success: false,
         message: "Invalid email or password",
       });
@@ -134,7 +134,7 @@ export const login = asyncHandler(async (req, res) => {
     const isPasswordMatched = await bcrypt.compare(password, user.password);
 
     if (!isPasswordMatched) {
-      return res.status(401).json({
+      return res.status(400).json({
         success: false,
         message: "Invalid email or password",
       });
@@ -190,7 +190,7 @@ export const adminLogin = asyncHandler(async (req, res) => {
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
-    return res.status(401).json({ success: false, message: "Invalid password" });
+    return res.status(400).json({ success: false, message: "Invalid password" });
   }
 
   const { accessToken, refreshToken } = await generateTokens(user._id);
@@ -290,7 +290,7 @@ export const handleSocialLogin = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     console.error("Social login failed:", error);
-    res.status(401).json({
+    res.status(400).json({
       success: false,
       message: "Invalid or expired token",
     });
