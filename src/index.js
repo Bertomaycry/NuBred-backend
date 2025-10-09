@@ -1,27 +1,29 @@
+import { execSync } from "child_process";
 import dotenv from "dotenv";
 import connectDB from "./db/index.js";
 import app from "./app.js";
-import { execSync } from "child_process";
+
+let currentBranch = "main";
+try {
+  currentBranch = execSync("git rev-parse --abbrev-ref HEAD").toString().trim();
+} catch (err) {
+  console.error("Error determining git branch, defaulting to 'main':", err);
+}
 
 
-
-const currentBranch = execSync("git rev-parse --abbrev-ref HEAD").toString().trim();
-console.log(`🟢 Current Git branch: ${currentBranch}`);
-
-let envFile = ".env.prod";
+let envFile = ".env.prod"; 
 if (currentBranch === "dev") envFile = ".env.dev";
 else if (currentBranch === "qa") envFile = ".env.qa";
 
-dotenv.config();
+dotenv.config({ path: envFile });
 
 connectDB()
   .then(() => {
-    app.listen(process.env.PORT || 5000, "0.0.0.0", () => {
-      console.log(
-        `Server is running on port http://localhost:${process.env.PORT}`
-      );
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`🚀 Server running at http://localhost:${PORT}`);
     });
   })
   .catch((error) => {
-    console.log(`Error connecting DB : ${error}`);
+    console.error(`❌ Error connecting DB: ${error}`);
   });
