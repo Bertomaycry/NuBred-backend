@@ -11,8 +11,8 @@ try {
 }
 
 
-let envFile = ".env.prod"; 
-if (currentBranch === "dev") envFile = ".env.dev";
+let envFile = ".env.dev"; 
+if (currentBranch === "main") envFile = ".env.prod";
 else if (currentBranch === "qa") envFile = ".env.qa";
 
 dotenv.config({ path: envFile });
