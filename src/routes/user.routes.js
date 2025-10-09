@@ -23,7 +23,7 @@ const router = Router();
 router.post("/register", register);
 router.post("/admin-login", adminLogin);
 router.get("/users", jwtVerify, getUsers);
-router.get("/user/:_id", jwtVerify, getSingleUser);
+router.get("/user/:_id", getSingleUser);
 router.post("/login", login);
 router.post("/logout", jwtVerify, logout);
 router.post("/social-login", handleSocialLogin);

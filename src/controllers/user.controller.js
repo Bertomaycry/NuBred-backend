@@ -1,7 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
-import admin from "../utils/firebase.js";
+// import admin from "../utils/firebase.js";
 
 export const register = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, phoneNumber, password } = req.body;
@@ -230,7 +230,7 @@ export const handleSocialLogin = asyncHandler(async (req, res) => {
   const { idToken } = req.body;
 
   try {
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    // const decodedToken = await admin.auth().verifyIdToken(idToken);
     const { email, name } = decodedToken;
 
     if (!email) {
