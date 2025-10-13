@@ -2,6 +2,7 @@ import { execSync } from "child_process";
 import dotenv from "dotenv";
 import connectDB from "./db/index.js";
 import app from "./app.js";
+import { scheduleUnregisterJob } from "./crons/unregisterJob.js";
 
 let currentBranch = "main";
 try {
@@ -11,11 +12,14 @@ try {
 }
 
 
-let envFile = ".env.dev"; 
+let envFile = ".env.dev";
 if (currentBranch === "main") envFile = ".env.prod";
 else if (currentBranch === "qa") envFile = ".env.qa";
 
 dotenv.config({ path: envFile });
+
+
+scheduleUnregisterJob()
 
 connectDB()
   .then(() => {

@@ -15,6 +15,7 @@ import {
   unregisterUser,
   registerAccount,
   adminLogin,
+  cancelUnregister,
 } from "../controllers/user.controller.js";
 import { jwtVerify } from "../middlewares/auth.middleware.js";
 
@@ -34,6 +35,7 @@ router.post("/unban", jwtVerify, removeBan);
 router.post("/update-ban", jwtVerify, updateBan);
 router.delete("/delete-user/:_id", jwtVerify, deleteUser);
 router.post("/unregister/:_id", jwtVerify, unregisterUser);
+router.post("/cancel-unregister/:_id", jwtVerify, cancelUnregister);
 router.post("/register-account", jwtVerify, registerAccount);
 
 export default router;

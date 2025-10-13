@@ -472,15 +472,20 @@ export const registerAccount = asyncHandler(async (req, res) => {
 export const unregisterUser = asyncHandler(async (req, res) => {
   try {
     const userId = req.params._id;
+
     const user = await User.findByIdAndUpdate(
       userId,
-      { is_unregistered: true },
+      {
+        unregister_requested: true,
+        unregister_scheduled_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      },
       { new: true }
     );
+
     if (user) {
       res.status(200).json({
         success: true,
-        message: "Account unregistered successfully",
+        message: "Unregistration scheduled in 30 days.",
         data: user,
       });
     } else {
@@ -497,3 +502,13 @@ export const unregisterUser = asyncHandler(async (req, res) => {
   }
 });
 
+
+export const cancelUnregister = asyncHandler(async (req, res) => {
+  const userId = req.params._id;
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { unregister_requested: false, unregister_scheduled_at: null },
+    { new: true }
+  );
+  res.json({ success: true, message: "Unregistration canceled", data: user });
+});
