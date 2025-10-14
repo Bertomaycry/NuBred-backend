@@ -75,10 +75,28 @@ export const getSingleUser = asyncHandler(async (req, res) => {
     const user = await User.findById(userId);
     if (user) {
 
+      const { accessToken, refreshToken } = await generateTokens(user._id);
+
       res.status(200).json({
         success: true,
         message: "Users fetched Successfully",
-        data: user,
+        data: {
+          _id: user._id,
+          name: `${user.firstName} ${user.lastName}`,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+          accessToken: accessToken || null,
+          refreshToken: refreshToken || null,
+          profile: user.profile,
+          profile_type: user.profile_type,
+          is_unregistered: user.is_unregistered,
+          account_created: user.account_created,
+          is_onboarded: user.is_onboarded,
+          is_account_created_skipped: user.is_account_created_skipped,
+          ban: user.ban,
+        },
       });
     } else {
       res.status(200).json({
