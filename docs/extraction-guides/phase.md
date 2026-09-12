@@ -16,6 +16,7 @@
 | Duration | Contracts (primary), emails | Confirmed from contract; Provisional from email |
 | Start trigger | Contracts | Confirmed from contract |
 | Location | Contracts, planting plans | Confirmed from contract; Provisional from plan draft |
+| Countries (ISO alpha-2) | Derived from location / production territory | Confirmed if countries are named; empty if unknown |
 | Number of plants / hectares | Contracts, planting plans | Confirmed from signed contract |
 | Gate criteria | Contracts (annexes), protocols (gate requirements) | Confirmed if protocol is official; Provisional if draft |
 | Capitolato defined (Pilot only) | Quality Specification document, contract reference | Confirmed if document present; null if not yet defined |

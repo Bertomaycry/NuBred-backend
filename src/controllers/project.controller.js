@@ -109,11 +109,26 @@ export const listProjects = asyncHandler(async (req, res) => {
 // @route   GET /api/projects/:projectId
 // @access  Private
 export const getProject = asyncHandler(async (req, res) => {
-  const documentCounts = await prisma.document.groupBy({
-    by: ["status"],
-    where: { projectId: req.project.id },
-    _count: { _all: true },
-  });
+  const [documentCounts, phases] = await Promise.all([
+    prisma.document.groupBy({
+      by: ["status"],
+      where: { projectId: req.project.id },
+      _count: { _all: true },
+    }),
+    prisma.phase.findMany({
+      where: { projectId: req.project.id },
+      orderBy: { sortOrder: "asc" },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        category: true,
+        location: true,
+        countries: true,
+        sortOrder: true,
+      },
+    }),
+  ]);
 
   res.status(200).json({
     success: true,
@@ -121,5 +136,9 @@ export const getProject = asyncHandler(async (req, res) => {
     documentsByStatus: Object.fromEntries(
       documentCounts.map((row) => [row.status, row._count._all])
     ),
+    phases: phases.map((phase) => ({
+      ...phase,
+      countries: Array.isArray(phase.countries) ? phase.countries : [],
+    })),
   });
 });

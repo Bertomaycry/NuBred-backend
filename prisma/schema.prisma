@@ -926,6 +926,7 @@ model Phase {
   duration          String?
   startTrigger      String?
   location          String?
+  countries         Json? // string[] ISO 3166-1 alpha-2
   plantCount        Int?
   hectares          Float?
   gateCriteria      Json? // string[]

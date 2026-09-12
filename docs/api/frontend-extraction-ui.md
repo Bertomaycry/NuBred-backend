@@ -334,11 +334,19 @@ payload.phases[]:
   name, type,              // TRIAL | PILOT | LAUNCH | SCALE | CUSTOM
   phase_category,          // EXPERIMENTAL | COMMERCIAL
   type_mapping_note, objective, duration, start_trigger,
-  location, plant_count, hectares, gate_criteria[],
+  location,            // prose: "Lleida (Spain) and Vale do Tejo (Portugal)"
+  countries[],         // ISO 3166-1 alpha-2: ["ES","PT"]; [] if unknown
+  plant_count, hectares, gate_criteria[],
   capitolato_defined,      // boolean | null
   genotype_decisions[]:    // { genotype_name, decision, decision_date, notes }
                            // decision: PROMOTE | REPEAT | DISCARD
 ```
+
+Project-detail world map: after Phase is confirmed, read `GET /api/projects/:projectId`
+→ `phases[]` (`docs/api/projects.md`). Do **not** parse `location` on the client.
+Use `countries[]` (ISO alpha-2). Empty `countries` → no marker. `category`
+EXPERIMENTAL = Testing; COMMERCIAL = Commercialization. Group by country for the
+popover. Review UI still binds the extraction payload above (snake_case).
 
 ### Protocol — `sectionKey: "protocol"`
 
@@ -410,6 +418,7 @@ drive Confirm from `rules.canConfirm`. Field edits and Gaps-tab tracking are in
 - [ ] Contract Gaps tab: PATCH `/review-state` `{ "gapsTabViewed": true }` before confirm.
 - [ ] Confirm only when `rules.canConfirm`; on 409 render `blocking[]`.
 - [ ] Nubred AI: docs/api/chat.md.
+- [ ] Project-detail map: GET project `phases[].countries` after phase confirm; skip empty.
 
 If the network tab shows `contract_type: "F1"` and `parties[0].name` filled but
 the screen says “not found”, the mapper is wrong — not Gemini and not the API.

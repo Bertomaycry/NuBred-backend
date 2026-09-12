@@ -55,3 +55,22 @@ export function asFloat(value) {
   const n = Number(value);
   return Number.isFinite(n) ? n : null;
 }
+
+/**
+ * Keep unique ISO 3166-1 alpha-2 codes (uppercase). Drop anything else.
+ * @param {unknown} value
+ * @returns {string[]}
+ */
+export function asIsoCountryCodes(value) {
+  if (!Array.isArray(value)) return [];
+  const seen = new Set();
+  const codes = [];
+  for (const item of value) {
+    if (typeof item !== "string") continue;
+    const code = item.trim().toUpperCase();
+    if (!/^[A-Z]{2}$/.test(code) || seen.has(code)) continue;
+    seen.add(code);
+    codes.push(code);
+  }
+  return codes;
+}

@@ -112,7 +112,21 @@ const phaseEntrySchema = z.object({
   location: z
     .string()
     .nullable()
-    .describe("Geographic location where this phase takes place, if specified."),
+    .describe(
+      "Geographic location where this phase takes place, if specified. " +
+        "Keep the original wording (sites, regions, cities). Do not replace this with country codes."
+    ),
+
+  countries: z
+    .array(z.string())
+    .default([])
+    .describe(
+      "ISO 3166-1 alpha-2 country codes for every country where this phase takes place. " +
+        "Derive from `location` and from the contract production territory when the phase " +
+        "is clearly tied to that territory. Uppercase two-letter codes only " +
+        "(e.g. ['ES','PT']). One phase may list several countries. " +
+        "Empty array if no country can be determined. Never invent countries."
+    ),
 
   plant_count: z
     .number()

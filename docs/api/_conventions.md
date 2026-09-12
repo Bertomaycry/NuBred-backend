@@ -206,3 +206,5 @@ Typical sequence for a new project
      the Contract Gaps tab; POST .../sections/:sectionKey/confirm when
      rules.canConfirm. See docs/api/review.md.
      Chatbot: docs/api/chat.md (conflict RESOLVE posts immediately; missing RESOLVE is static until the user types or uploads).
+  8. Project detail (after phase confirm): GET /api/projects/:projectId → phases[]
+     for the world map (`countries` ISO alpha-2). Empty until phase is confirmed.

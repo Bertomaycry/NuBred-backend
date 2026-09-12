@@ -349,7 +349,8 @@ What confirm writes (domain)
   contract   → one ProjectContract per project (upsert) + replace parties + replace
                clauses from payload.flags (clause_id, type, severity, note)
   genotype   → upsert Genotype by name; set project.primarySpeciesBotanical/Common
-  phase      → replace Phase rows + PhaseGenotype (matched by genotype name)
+  phase      → replace Phase rows + PhaseGenotype (matched by genotype name).
+               Phase.countries is ISO 3166-1 alpha-2 string[] (invalid codes dropped).
   protocol   → replace Protocol + ProtocolParameter; phaseId linked when a Phase
                with matching type exists
   chronology → replace ChronologyEvent rows
