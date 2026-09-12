@@ -109,7 +109,18 @@ Response 200:
       "PROCESSING": number,
       "READY": number,
       "FAILED": number
-    }
+    },
+    "phases": [
+      {
+        "id": string,
+        "name": string | null,
+        "type": "TRIAL" | "PILOT" | "LAUNCH" | "SCALE" | "CUSTOM" | null,
+        "category": "EXPERIMENTAL" | "COMMERCIAL" | null,
+        "location": string | null,     // original site prose (cities, regions)
+        "countries": string[],         // ISO 3166-1 alpha-2, e.g. ["ES","PT"]; [] if unknown
+        "sortOrder": number
+      }
+    ]
   }
 
 Errors:
@@ -124,3 +135,13 @@ Notes:
   - Viewer access: creator OR ACTIVE project member.
   - documentsByStatus is an object, not an array. Missing keys mean count 0 — treat absent as 0 in the UI.
   - Use this after uploads to show how many files are still processing vs ready.
+  - `phases` is the confirmed domain snapshot (empty `[]` until the VM confirms the Phase section).
+    Use this for the project-detail world map — not the extraction draft.
+  - World map:
+      * One marker per distinct country code across phases (not per city).
+      * `category` EXPERIMENTAL (TRIAL/PILOT) → Testing marker.
+      * `category` COMMERCIAL (LAUNCH/SCALE) → Commercialization marker.
+      * Same country on both categories: show both (or a combined popover listing each phase).
+      * Skip a phase when `countries` is empty — do not guess from `location` or party country.
+      * Popover copy: `name` (title) + `type` (subtitle). Keep `location` as extra detail.
+      * `project.status` stays DRAFT after confirm; that does not block this map.
